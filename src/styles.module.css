@@ -12,6 +12,13 @@ code {
     monospace;
 }
 
+html,
+body,
+body > div {
+  height: 100%;
+  margin: 0;
+}
+
 .sendButton {
   position: absolute;
   top: 20px;
