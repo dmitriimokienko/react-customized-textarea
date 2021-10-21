@@ -6,6 +6,7 @@ import {
   FormEvent,
   HTMLAttributes,
   KeyboardEvent,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -21,6 +22,7 @@ import {
 } from "../utils";
 import { useFocus, useCalcHeight } from "../hooks";
 import { BUTTON_ID, TEXT_FIELD_ID, TEXTAREA_ID } from "../constants";
+import { appendDefaultText } from "../utils/formatters";
 
 interface Props {
   Button: ElementType;
@@ -88,14 +90,14 @@ export const Textarea: FC<Partial<Props>> = ({
   });
 
   // todo: add default value (string or Nodes)
-  // useEffect(() => {
-  //   if (!defaultValue) return;
-  //   if (typeof defaultValue === "string") {
-  //     setText(defaultValue);
-  //   }
-  //   formatContent(divRef.current, text, isLinkParse);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [defaultValue]);
+  useEffect(() => {
+    if (!defaultValue) return;
+    if (typeof defaultValue === "string") {
+      setText(defaultValue);
+      appendDefaultText(divRef.current, defaultValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValue]);
 
   const submit = () => {
     onSend?.(text);

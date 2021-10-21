@@ -82,3 +82,11 @@ export const parseContent = (content: HTMLDivElement | null) => {
     link.replaceWith(document.createTextNode(link.innerText));
   });
 };
+
+export const appendDefaultText = (
+  content: HTMLDivElement | null,
+  text: string
+) => {
+  if (!content) return;
+  content.append(...[createTextNode(text, false)]);
+};
