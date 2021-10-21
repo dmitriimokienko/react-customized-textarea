@@ -6,7 +6,6 @@ import {
   FormEvent,
   HTMLAttributes,
   KeyboardEvent,
-  useEffect,
   useRef,
   useState,
 } from "react";
@@ -89,14 +88,14 @@ export const Textarea: FC<Partial<Props>> = ({
   });
 
   // todo: add default value (string or Nodes)
-  useEffect(() => {
-    if (!defaultValue) return;
-    if (typeof defaultValue === "string") {
-      setText(defaultValue);
-    }
-    formatContent(divRef.current, text, isLinkParse);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultValue]);
+  // useEffect(() => {
+  //   if (!defaultValue) return;
+  //   if (typeof defaultValue === "string") {
+  //     setText(defaultValue);
+  //   }
+  //   formatContent(divRef.current, text, isLinkParse);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [defaultValue]);
 
   const submit = () => {
     onSend?.(text);
@@ -132,10 +131,12 @@ export const Textarea: FC<Partial<Props>> = ({
     afterFocus?.(e);
   };
   const handleBlur = () => {
-    beforeBlur?.();
-    formatContent(divRef.current, text, isLinkParse);
-    onBlur();
-    afterBlur?.();
+    setTimeout(() => {
+      beforeBlur?.();
+      formatContent(divRef.current, text, isLinkParse);
+      onBlur();
+      afterBlur?.();
+    }, 5);
   };
 
   const _isButtonVisible = isButtonVisible ?? !isEmptyMessage(text);

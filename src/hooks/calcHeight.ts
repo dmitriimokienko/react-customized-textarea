@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const DEFAULT_HEIGHT = 22;
+const DEFAULT_HEIGHT = 24;
 
 export const useCalcHeight = (
   textArea: HTMLTextAreaElement | null,
