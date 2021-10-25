@@ -5,7 +5,11 @@ import {
   FocusEvent,
   FormEvent,
   HTMLAttributes,
+  isValidElement,
   KeyboardEvent,
+  ReactNode,
+  useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -14,17 +18,19 @@ import styles from "../styles.module.css";
 import {
   parseContent,
   formatContent,
-  formatText,
+  extractText,
   clearElement,
   isEmptyMessage,
   pasteText,
+  appendReactDOMElement,
+  appendString,
 } from "../utils";
 import { useFocus, useCalcHeight } from "../hooks";
 import { BUTTON_ID, TEXT_FIELD_ID, TEXTAREA_ID } from "../constants";
 
 interface Props {
   Button: ElementType;
-  defaultValue: string | ElementType;
+  defaultValue: string | ReactNode;
   onSend: (text: string) => void;
   minRows: number;
   maxRows: number;
@@ -87,15 +93,15 @@ export const Textarea: FC<Partial<Props>> = ({
     lineHeight,
   });
 
-  // todo: add default value (string or Nodes)
-  // useEffect(() => {
-  //   if (!defaultValue) return;
-  //   if (typeof defaultValue === "string") {
-  //     setText(defaultValue);
-  //   }
-  //   formatContent(divRef.current, text, isLinkParse);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [defaultValue]);
+  useEffect(() => {
+    if (!defaultValue) return;
+    if (typeof defaultValue === "string") {
+      setText(appendString(divRef.current, defaultValue));
+    }
+    if (isValidElement(defaultValue)) {
+      setText(appendReactDOMElement(divRef.current, defaultValue, isLinkParse));
+    }
+  }, [defaultValue, isLinkParse]);
 
   const submit = () => {
     onSend?.(text);
@@ -113,14 +119,14 @@ export const Textarea: FC<Partial<Props>> = ({
   };
   const handleChange = (e: FormEvent<HTMLDivElement>) => {
     beforeChange?.(e);
-    setText(formatText(e.target as HTMLDivElement));
+    setText(extractText(e.target as HTMLDivElement));
     afterChange?.(e);
   };
   const handlePaste = (e: ClipboardEvent<HTMLDivElement>) => {
     beforePaste?.(e);
     e.preventDefault();
     pasteText(e);
-    setText(formatText(divRef.current));
+    setText(extractText(divRef.current));
     afterPaste?.(e);
   };
   const handleFocus = (e: FocusEvent<HTMLDivElement>) => {
@@ -139,7 +145,10 @@ export const Textarea: FC<Partial<Props>> = ({
     }, 5);
   };
 
-  const _isButtonVisible = isButtonVisible ?? !isEmptyMessage(text);
+  const _isButtonVisible = useMemo(() => {
+    console.log(text)
+    return isButtonVisible ?? !isEmptyMessage(text);
+  }, [isButtonVisible, text]);
 
   return (
     <div

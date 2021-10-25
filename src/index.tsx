@@ -7,7 +7,14 @@ import reportWebVitals from "./reportWebVitals";
 ReactDOM.render(
   <React.StrictMode>
     <Wrapper>
-      <Textarea onSend={(text: string) => alert(text)} />
+      <Textarea
+        onSend={(text: string) => alert(text)}
+        defaultValue={
+          <div>
+            <a href="#">http://localhost:3000/</a> <span>qwe qwe qwe </span>
+          </div>
+        }
+      />
     </Wrapper>
   </React.StrictMode>,
   document.getElementById("root")

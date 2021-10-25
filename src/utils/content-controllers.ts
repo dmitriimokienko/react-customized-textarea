@@ -1,4 +1,6 @@
-import { ClipboardEvent } from "react";
+import { ClipboardEvent, DOMAttributes, DOMElement, ReactNode } from "react";
+import ReactDOM from "react-dom";
+import { TEXT_FIELD_ID } from "../constants";
 import {
   formatTextLiterals,
   isEmptyMessage,
@@ -32,7 +34,7 @@ export const pasteText = (e: ClipboardEvent<HTMLDivElement>) => {
   selection.collapseToEnd();
 };
 
-export const formatText = (content: HTMLDivElement | null) => {
+export const extractText = (content: HTMLDivElement | null) => {
   if (!content) return "";
   const messageLines: string[] = [];
   content.childNodes.forEach((node, i, arr) => {
@@ -81,4 +83,28 @@ export const parseContent = (content: HTMLDivElement | null) => {
   links?.forEach((link) => {
     link.replaceWith(document.createTextNode(link.innerText));
   });
+};
+
+export const appendString = (content: HTMLDivElement | null, text: string) => {
+  if (!content) return "";
+  content.append(...[createTextNode(text, false)]);
+  return text;
+};
+
+export const appendReactDOMElement = (
+  content: HTMLDivElement | null,
+  element: ReactNode,
+  isLinkParse: boolean
+) => {
+  let text = "";
+  if (!content) return text;
+  ReactDOM.render(
+    element as DOMElement<DOMAttributes<Element>, Element>,
+    document.getElementById(TEXT_FIELD_ID),
+    () => {
+      text = extractText(content);
+      formatContent(content, text, isLinkParse);
+    }
+  );
+  return text;
 };
