@@ -28,7 +28,7 @@ import {
 import { useFocus, useCalcHeight } from "../hooks";
 import { BUTTON_ID, TEXT_FIELD_ID, TEXTAREA_ID } from "../constants";
 
-interface Props {
+type Props = Partial<{
     Button: ElementType;
     defaultValue: string | ReactNode;
     onSend: (text: string) => void;
@@ -50,11 +50,11 @@ interface Props {
         HTMLAttributes<HTMLDivElement>,
         "id" | "contentEditable" | "className" | "ref" | "style" | "onKeyDown" | "onInput" | "onPaste"
     >;
-}
+}>;
 
 // todo: add max-length
 // todo: add disable
-export const Textarea: FC<Partial<Props>> = ({
+export const Textarea: FC<Props> = ({
     onSend,
     Button,
     isButtonVisible,

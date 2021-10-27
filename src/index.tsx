@@ -11,7 +11,7 @@ ReactDOM.render(
                 onSend={(text: string) => alert(text)}
                 defaultValue={
                     <div>
-                        <a href="#">http://localhost:3000/</a> <span>qwe qwe qwe </span>
+                        <a href="http://localhost:3000/">http://localhost:3000/</a> <span>qwe qwe qwe </span>
                     </div>
                 }
             />
