@@ -147,9 +147,7 @@ export const Textarea: FC<Partial<Props>> = ({
         }, 5);
     };
 
-    const _isButtonVisible = useMemo(() => {
-        return isButtonVisible ?? !isEmptyMessage(text);
-    }, [isButtonVisible, text]);
+    const _isButtonVisible = useMemo(() => isButtonVisible ?? !isEmptyMessage(text), [isButtonVisible, text]);
 
     return (
         <div
