@@ -72,19 +72,16 @@ export const parseContent = (content: HTMLDivElement | null) => {
 export const appendString = (content: HTMLDivElement | null, text: string) => {
     if (!content) return "";
     content.append(...[createTextNode(text, false)]);
-    return text;
 };
 
 export const appendReactDOMElement = (content: HTMLDivElement | null, element: ReactNode, isLinkParse: boolean) => {
-    let text = "";
-    if (!content) return text;
+    if (!content) return "";
     ReactDOM.render(
         element as DOMElement<DOMAttributes<Element>, Element>,
         document.getElementById(TEXT_FIELD_ID),
         () => {
-            text = extractText(content);
+            const text = extractText(content);
             formatContent(content, text, isLinkParse);
         }
     );
-    return text;
 };

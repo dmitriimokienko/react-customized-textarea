@@ -86,15 +86,24 @@ export const Textarea: FC<Partial<Props>> = ({
         lineHeight,
     });
 
+    const [isRender, setIsRender] = useState(false);
     useEffect(() => {
         if (!defaultValue) return;
         if (typeof defaultValue === "string") {
-            setText(appendString(divRef.current, defaultValue));
+            appendString(divRef.current, defaultValue);
+            setText(defaultValue);
         }
         if (isValidElement(defaultValue)) {
-            setText(appendReactDOMElement(divRef.current, defaultValue, isLinkParse));
+            appendReactDOMElement(divRef.current, defaultValue, isLinkParse);
+            setIsRender(true);
         }
     }, [defaultValue, isLinkParse]);
+    useEffect(() => {
+        if (isRender) {
+            setText(extractText(divRef.current));
+            setIsRender(false);
+        }
+    }, [isRender]);
 
     const submit = () => {
         onSend?.(text);
